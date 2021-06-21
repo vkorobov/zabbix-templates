@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.2</version>
+    <date>2021-03-25T14:22:50Z</date>
+    <groups>
+        <group>
+            <name>UPS</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template UPS SNMP Module</template>
+            <name>Template UPS SNMP Module</name>
+            <templates>
+                <template>
+                    <name>Template Module ICMP Ping</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>UPS</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Battery information</name>
+                </application>
+                <application>
+                    <name>System Information</name>
+                </application>
+                <application>
+                    <name>UPS Healthy</name>
+                </application>
+                <application>
+                    <name>UPS Input</name>
+                </application>
+                <application>
+                    <name>UPS Output</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Firmware version</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.1.3.0</snmp_oid>
+                    <key>lgpAgentDeviceFirmwareVersion</key>
+                    <delay>24h</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <applications>
+                        <application>
+                            <name>System Information</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Model</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.1.2.0</snmp_oid>
+                    <key>lgpAgentDeviceModel</key>
+                    <delay>24h</delay>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <applications>
+                        <application>
+                            <name>System Information</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Number of current alarm</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.6.1.0</snmp_oid>
+                    <key>upsAlarmsPresent</key>
+                    <delay>30s</delay>
+                    <units>Alarm</units>
+                    <description>The present number of active alarm conditions
+
+A list of alarm table entries.  The table contains
+zero, one, or many rows at any moment, depending upon
+the number of alarm conditions in effect.  The table
+is initially empty at agent startup.  The agent
+creates a row in the table each time a condition is
+detected and deletes that row when that condition no
+longer pertains.  The agent creates the first row with
+upsAlarmId equal to 1, and increments the value of
+upsAlarmId each time a new row is created, wrapping to
+the first free value greater than or equal to 1 when
+the maximum value of upsAlarmId would otherwise be
+exceeded.  Consequently, after multiple operations,
+the table may become sparse, e.g., containing entries
+for rows 95, 100, 101, and 203 and the entries should
+not be assumed to be in chronological order because
+upsAlarmId might have wrapped.
+Alarms are named by an AutonomousType (OBJECT
+IDENTIFIER), upsAlarmDescr, to allow a single table to
+reflect well known alarms plus alarms defined by a
+particular implementation, i.e., as documented in the
+private enterprise MIB definition for the device.  No
+two rows will have the same value of upsAlarmDescr,
+since alarms define conditions.  In order to meet this
+requirement, care should be taken in the definition of
+alarm conditions to insure that a system cannot enter
+the same condition multiple times simultaneously.
+The number of rows in the table at any given time is
+reflected by the value of upsAlarmsPresent.</description>
+                    <applications>
+                        <application>
+                            <name>UPS Healthy</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(,0)}&gt;=1</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}=0</recovery_expression>
+                            <name>An alarm has been detected, please check</name>
+                            <priority>HIGH</priority>
+                            <description>Login to the ups Web UI and check for any alarms there.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Battery current</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.2.6.0</snmp_oid>
+                    <key>upsBatteryCurrent</key>
+                    <delay>30s</delay>
+                    <units>V</units>
+                    <description>The present battery current</description>
+                    <applications>
+                        <application>
+                            <name>Battery information</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Battery status</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.2.1.0</snmp_oid>
+                    <key>upsBatteryStatus</key>
+                    <delay>30s</delay>
+                    <description>The indication of the capacity remaining in the UPS
+system's batteries.   A value of batteryNormal
+indicates that the remaining run-time is greater than
+upsConfigLowBattTime.  A value of batteryLow indicates
+that the remaining battery run-time is less than or
+equal to upsConfigLowBattTime.  A value of
+batteryDepleted indicates that the UPS will be unable
+to sustain the present load when and if the utility
+power is lost (including the possibility that the
+utility power is currently absent and the UPS is
+unable to sustain the output).
+
+ INTEGER {unknown(1),
+batteryNormal(2),
+batteryLow(3),
+batteryDepleted(4)
+}</description>
+                    <applications>
+                        <application>
+                            <name>Battery information</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>apcBatteryStatus</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(,0)}=4</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}=2</recovery_expression>
+                            <name>Battery Depleted</name>
+                            <priority>DISASTER</priority>
+                            <description>{unknown(1),
+batteryNormal(2),
+batteryLow(3),
+batteryDepleted(4)
+}</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}=3</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}=2</recovery_expression>
+                            <name>Battery Low</name>
+                            <priority>HIGH</priority>
+                            <description>{unknown(1),
+batteryNormal(2),
+batteryLow(3),
+batteryDepleted(4)
+}</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Battery voltage</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.2.5.0</snmp_oid>
+                    <key>upsBatteryVoltage</key>
+                    <delay>30s</delay>
+                    <applications>
+                        <application>
+                            <name>Battery information</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.1</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </item>
+                <item>
+                    <name>Charge remaining</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.2.4.0</snmp_oid>
+                    <key>upsEstimatedChargeRemaining</key>
+                    <delay>30s</delay>
+                    <units>%</units>
+                    <description>An estimate of the battery charge remaining expressed
+as a percent of full charge</description>
+                    <applications>
+                        <application>
+                            <name>Battery information</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(,0)}&lt;10</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}&gt;10</recovery_expression>
+                            <name>Battery capacity below 10%</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}&lt;20</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}&gt;20</recovery_expression>
+                            <name>Battery capacity below 20%</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}&lt;30</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}&gt;30</recovery_expression>
+                            <name>Battery capacity below 30%</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}&lt;40</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}&gt;40</recovery_expression>
+                            <name>Battery capacity below 40%</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}&lt;50</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}&gt;50</recovery_expression>
+                            <name>Battery capacity below 50%</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Estimated time remaining on battery</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.2.3.0</snmp_oid>
+                    <key>upsEstimatedMinutesRemaining</key>
+                    <delay>30s</delay>
+                    <units>min</units>
+                    <description>An estimate of the time to battery charge depletion
+under the present load conditions if the utility power
+is off and remains off, or if it were to be lost and
+remain off.</description>
+                    <applications>
+                        <application>
+                            <name>Battery information</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(,0)}=5</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}=30</recovery_expression>
+                            <name>Battery will turn in 5 min</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}=15</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}=30</recovery_expression>
+                            <name>Battery will turn in 15 min</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Input current</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.3.3.1.4.1</snmp_oid>
+                    <key>upsInputCurrent</key>
+                    <delay>30s</delay>
+                    <units>A</units>
+                    <description>The magnitude of the present input current.</description>
+                    <applications>
+                        <application>
+                            <name>UPS Input</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.1</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </item>
+                <item>
+                    <name>Input Frequency</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.3.3.1.2.1</snmp_oid>
+                    <key>upsInputFrequency</key>
+                    <delay>30s</delay>
+                    <description>The present input frequency.</description>
+                    <applications>
+                        <application>
+                            <name>UPS Input</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.1</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </item>
+                <item>
+                    <name>Input Voltage</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.3.3.1.3.1</snmp_oid>
+                    <key>upsInputVoltage</key>
+                    <delay>30s</delay>
+                    <units>V</units>
+                    <applications>
+                        <application>
+                            <name>UPS Input</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(,0)}&lt;100</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}&gt;220</recovery_expression>
+                            <name>Input voltage failed</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Output current</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.4.4.1.3.1</snmp_oid>
+                    <key>upsOutputCurrent</key>
+                    <delay>30s</delay>
+                    <units>A</units>
+                    <description>The present output current</description>
+                    <applications>
+                        <application>
+                            <name>UPS Output</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.1</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </item>
+                <item>
+                    <name>Output frequency</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.4.2.0</snmp_oid>
+                    <key>upsOutputFrequency</key>
+                    <delay>30s</delay>
+                    <description>The present output frequency.</description>
+                    <applications>
+                        <application>
+                            <name>UPS Output</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.1</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </item>
+                <item>
+                    <name>Output load</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.4.4.1.5.1</snmp_oid>
+                    <key>upsOutputPercentLoad</key>
+                    <delay>30s</delay>
+                    <description>The percentage of the UPS power capacity presently being used on this output line, i.e., the greater of the percent load of true power capacity and the percent load of VA.</description>
+                    <applications>
+                        <application>
+                            <name>UPS Output</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Output power</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.4.4.1.4.1</snmp_oid>
+                    <key>upsOutputPower</key>
+                    <delay>30s</delay>
+                    <units>W</units>
+                    <description>The present output true power</description>
+                    <applications>
+                        <application>
+                            <name>UPS Output</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Output source</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.4.1.0</snmp_oid>
+                    <key>upsOutputSource</key>
+                    <delay>30s</delay>
+                    <description>The present source of output power.  The enumeration
+none(2) indicates that there is no source of output
+power (and therefore no output power), for example,
+the system has opened the output breaker
+Support of the values other(1), none(2), bypass(4), booster(6) and reducer(7) is not required.</description>
+                    <applications>
+                        <application>
+                            <name>UPS Output</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Tripplite Output Source</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(,0)}=6</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}=3</recovery_expression>
+                            <name>UPS in booster mode</name>
+                            <priority>WARNING</priority>
+                            <description>other(1),
+none(2),
+normal(3),
+bypass(4),
+battery(5),
+booster(6),
+reducer(7)</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}=7</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}=3</recovery_expression>
+                            <name>UPS in reducer mode</name>
+                            <priority>WARNING</priority>
+                            <description>other(1),
+none(2),
+normal(3),
+bypass(4),
+battery(5),
+booster(6),
+reducer(7)</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}=5</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}=3</recovery_expression>
+                            <name>UPS on battery</name>
+                            <priority>HIGH</priority>
+                            <description>other(1),
+none(2),
+normal(3),
+bypass(4),
+battery(5),
+booster(6),
+reducer(7)</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}=4</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}=3</recovery_expression>
+                            <name>UPS on bypass</name>
+                            <priority>HIGH</priority>
+                            <description>other(1),
+none(2),
+normal(3),
+bypass(4),
+battery(5),
+booster(6),
+reducer(7)</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Output voltage</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.4.4.1.2.1</snmp_oid>
+                    <key>upsOutputVoltage</key>
+                    <delay>30s</delay>
+                    <units>Volts</units>
+                    <description>The present output voltage</description>
+                    <applications>
+                        <application>
+                            <name>UPS Output</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Time on battery</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.2.2.0</snmp_oid>
+                    <key>upsSecondsOnBattery</key>
+                    <delay>30s</delay>
+                    <units>uptime</units>
+                    <description>If the unit is on battery power, the elapsed time
+since the UPS last switched to battery power, or the
+time since the network management subsystem was last
+restarted, whichever is less.  Zero shall be returned
+if the unit is not on battery power.</description>
+                    <applications>
+                        <application>
+                            <name>Battery information</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>apcBatteryStatus</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(,0)}&gt;0</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}&lt;=0</recovery_expression>
+                            <name>UPS on battery power</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}&gt;60</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}&lt;=0</recovery_expression>
+                            <name>UPS on battery power for 1 minute</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}&gt;120</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>{last(,0)}&lt;=0</recovery_expression>
+                            <name>UPS on battery power for 2 minute</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>UPS test results</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.7.4.0</snmp_oid>
+                    <key>upsTestResultsDetail</key>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>Additional information about upsTestResultsSummary.
+If no additional information available, a zero length
+string is returned</description>
+                    <applications>
+                        <application>
+                            <name>UPS Healthy</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>UPS last test performed</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.2.1.33.1.7.3.0</snmp_oid>
+                    <key>upsTestResultsSummary</key>
+                    <description>The results of the current or last UPS diagnostics
+test performed.  The values for donePass(1),
+doneWarning(2), and doneError(3) indicate that the
+test completed either successfully, with a warning, or
+with an error, respectively.  The value aborted(4) is
+returned for tests which are aborted by setting the
+value of upsTestId to upsTestAbortTestInProgress.
+Tests which have not yet concluded are indicated by
+inProgress(5).  The value noTestsInitiated(6)
+indicates that no previous test results are available,
+such as is the case when no tests have been run since
+the last reinitialization of the network management
+subsystem and the system has no provision for non-
+volatile storage of test results
+
+ INTEGER {donePass(1),
+doneWarning(2),
+doneError(3),
+aborted(4),
+inProgress(5),
+noTestsInitiated(6)
+}</description>
+                    <applications>
+                        <application>
+                            <name>UPS Healthy</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>UPS_Test_Summary</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(,0)}=2</expression>
+                            <name>Last test performed reported a warning, please check</name>
+                            <url>http://pth-rack03-ups.corescan.net.au/default.html?devId=4</url>
+                            <priority>WARNING</priority>
+                            <description>INTEGER {donePass(1),
+doneWarning(2),
+doneError(3),
+aborted(4),
+inProgress(5),
+noTestsInitiated(6)
+}</description>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}=3</expression>
+                            <name>Last test performed reported with error, please check</name>
+                            <url>http://pth-rack03-ups.corescan.net.au/default.html?devId=4</url>
+                            <priority>AVERAGE</priority>
+                            <description>INTEGER {donePass(1),
+doneWarning(2),
+doneError(3),
+aborted(4),
+inProgress(5),
+noTestsInitiated(6)
+}</description>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <dashboards>
+                <dashboard>
+                    <name>UPS Status</name>
+                    <widgets>
+                        <widget>
+                            <type>GRAPH_CLASSIC</type>
+                            <x>1</x>
+                            <y>1</y>
+                            <width>12</width>
+                            <height>5</height>
+                            <fields>
+                                <field>
+                                    <type>GRAPH</type>
+                                    <name>graphid</name>
+                                    <value>
+                                        <name>Output Load and Runtime</name>
+                                        <host>Template UPS SNMP Module</host>
+                                    </value>
+                                </field>
+                            </fields>
+                        </widget>
+                        <widget>
+                            <type>GRAPH_CLASSIC</type>
+                            <name>Battery</name>
+                            <x>13</x>
+                            <y>1</y>
+                            <width>7</width>
+                            <height>4</height>
+                            <fields>
+                                <field>
+                                    <type>GRAPH</type>
+                                    <name>graphid</name>
+                                    <value>
+                                        <name>Battery</name>
+                                        <host>Template UPS SNMP Module</host>
+                                    </value>
+                                </field>
+                            </fields>
+                        </widget>
+                        <widget>
+                            <type>GRAPH_CLASSIC</type>
+                            <name>Input</name>
+                            <x>1</x>
+                            <y>6</y>
+                            <width>12</width>
+                            <height>5</height>
+                            <fields>
+                                <field>
+                                    <type>GRAPH</type>
+                                    <name>graphid</name>
+                                    <value>
+                                        <name>Input Volts and Frequency</name>
+                                        <host>Template UPS SNMP Module</host>
+                                    </value>
+                                </field>
+                            </fields>
+                        </widget>
+                    </widgets>
+                </dashboard>
+            </dashboards>
+        </template>
+    </templates>
+    <graphs>
+        <graph>
+            <name>Battery</name>
+            <width>1200</width>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>0040FF</color>
+                    <yaxisside>RIGHT</yaxisside>
+                    <item>
+                        <host>Template UPS SNMP Module</host>
+                        <key>upsEstimatedChargeRemaining</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>Template UPS SNMP Module</host>
+                        <key>upsBatteryVoltage</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Input Volts and Frequency</name>
+            <width>1200</width>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <yaxisside>RIGHT</yaxisside>
+                    <item>
+                        <host>Template UPS SNMP Module</host>
+                        <key>upsInputFrequency</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>Template UPS SNMP Module</host>
+                        <key>upsInputVoltage</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Output Load and Runtime</name>
+            <width>1200</width>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>Template UPS SNMP Module</host>
+                        <key>upsEstimatedMinutesRemaining</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <yaxisside>RIGHT</yaxisside>
+                    <item>
+                        <host>Template UPS SNMP Module</host>
+                        <key>upsOutputPercentLoad</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+    <value_maps>
+        <value_map>
+            <name>apcBatteryStatus</name>
+            <mappings>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>unknown</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>batteryNormal</newvalue>
+                </mapping>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>batteryLow</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>batteryDepleted</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>Tripplite Output Source</name>
+            <mappings>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>other</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>none</newvalue>
+                </mapping>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>normal</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>bypass</newvalue>
+                </mapping>
+                <mapping>
+                    <value>5</value>
+                    <newvalue>battery</newvalue>
+                </mapping>
+                <mapping>
+                    <value>6</value>
+                    <newvalue>booster</newvalue>
+                </mapping>
+                <mapping>
+                    <value>7</value>
+                    <newvalue>reducer</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+        <value_map>
+            <name>UPS_Test_Summary</name>
+            <mappings>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>donePass</newvalue>
+                </mapping>
+                <mapping>
+                    <value>2</value>
+                    <newvalue>doneWarning</newvalue>
+                </mapping>
+                <mapping>
+                    <value>3</value>
+                    <newvalue>doneError</newvalue>
+                </mapping>
+                <mapping>
+                    <value>4</value>
+                    <newvalue>aborted</newvalue>
+                </mapping>
+                <mapping>
+                    <value>5</value>
+                    <newvalue>inProgress</newvalue>
+                </mapping>
+                <mapping>
+                    <value>6</value>
+                    <newvalue>noTestsInitiated</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>
