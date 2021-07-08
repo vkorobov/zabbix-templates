@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.4</version>
+    <date>2021-07-08T06:30:20Z</date>
+    <groups>
+        <group>
+            <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>f971fd8dea664aad88acca3952678bb6</uuid>
+            <template>FileMaker Server Windows Template</template>
+            <name>FileMaker Server Windows Template</name>
+            <templates>
+                <template>
+                    <name>Template OS Windows by Zabbix agent</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>f73fd8f4713a4d1db4f160e46f9f9415</uuid>
+                    <name>FM Server port 1895 status</name>
+                    <key>net.tcp.listen[1895]</key>
+                    <history>1w</history>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>FileMaker</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>e0df97cb6c3842d39aa21ddfc9f4a18d</uuid>
+                            <expression>last(/FileMaker Server Windows Template/net.tcp.listen[1895],#2)=0</expression>
+                            <name>Cannot connect to port 1895</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>133b7103245a4ba7852d2b2f58f229be</uuid>
+                    <name>FM Server port 5003 status</name>
+                    <key>net.tcp.listen[5003]</key>
+                    <history>1w</history>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>FileMaker</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>898729ca49504c37ab5b3dfe0f66df99</uuid>
+                            <expression>last(/FileMaker Server Windows Template/net.tcp.listen[5003],#2)=0</expression>
+                            <name>Cannot connect to port 5003</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>dce1329fd0b04c34af388ad158495ac1</uuid>
+                    <name>FM Server port 16001 status</name>
+                    <key>net.tcp.listen[16001]</key>
+                    <history>1w</history>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>FileMaker</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>9dbb09174f5541f5ab83cb4b2ce1307e</uuid>
+                            <expression>last(/FileMaker Server Windows Template/net.tcp.listen[16001],#2)=0</expression>
+                            <name>Cannot connect to port 16001</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>08a6006b866944f7bb710f7ed0244b49</uuid>
+                    <name>FM Server port 16002 status</name>
+                    <key>net.tcp.listen[16002]</key>
+                    <history>1w</history>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>FileMaker</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>2b99be986d4149f6941ce2ba6ebe4628</uuid>
+                            <expression>last(/FileMaker Server Windows Template/net.tcp.listen[16002],#2)=0</expression>
+                            <name>Cannot connect to port 16002</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>d0b56fb688904539849527076783abd8</uuid>
+                    <name>Avg. Disk Read Queue Length</name>
+                    <key>perf_counter_en[&quot;\PhysicalDisk(_Total)\Avg. Disk Read Queue Length&quot;]</key>
+                    <history>1w</history>
+                </item>
+                <item>
+                    <uuid>62af6e26c890497fbe68dbc6fca456fe</uuid>
+                    <name>Avg. Disk Write Queue Length</name>
+                    <key>perf_counter_en[&quot;\PhysicalDisk(_Total)\Avg. Disk Write Queue Length&quot;]</key>
+                    <history>1w</history>
+                </item>
+                <item>
+                    <uuid>d2f137edcfc74a1196627825be1935c5</uuid>
+                    <name>File Read Bytes/sec</name>
+                    <key>perf_counter_en[&quot;\System\File Read Bytes/sec&quot;]</key>
+                    <history>1w</history>
+                </item>
+                <item>
+                    <uuid>edeab4ca485e4e80b4417c7e13ccc4af</uuid>
+                    <name>File Write Bytes/sec</name>
+                    <key>perf_counter_en[&quot;\System\File Write Bytes/sec&quot;]</key>
+                    <history>1w</history>
+                </item>
+                <item>
+                    <uuid>91b8b4e12e7743f7917482ed78115fd1</uuid>
+                    <name>Available memory</name>
+                    <key>vm.memory.size[available]</key>
+                    <history>1w</history>
+                    <units>B</units>
+                    <description>Available memory is defined as free+cached+buffers memory.</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+            </items>
+            <dashboards>
+                <dashboard>
+                    <uuid>02734225a2d64a93b533efef964e285c</uuid>
+                    <name>FM Server Windows Screen</name>
+                    <pages>
+                        <page>
+                            <widgets>
+                                <widget>
+                                    <type>PLAIN_TEXT</type>
+                                    <width>12</width>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>show_lines</name>
+                                            <value>1</value>
+                                        </field>
+                                        <field>
+                                            <type>ITEM</type>
+                                            <name>itemids</name>
+                                            <value>
+                                                <key>system.uname</key>
+                                                <host>FileMaker Server Windows Template</host>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>PLAIN_TEXT</type>
+                                    <x>12</x>
+                                    <width>6</width>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>show_lines</name>
+                                            <value>1</value>
+                                        </field>
+                                        <field>
+                                            <type>ITEM</type>
+                                            <name>itemids</name>
+                                            <value>
+                                                <key>agent.version</key>
+                                                <host>FileMaker Server Windows Template</host>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>PLAIN_TEXT</type>
+                                    <x>18</x>
+                                    <width>6</width>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>show_lines</name>
+                                            <value>1</value>
+                                        </field>
+                                        <field>
+                                            <type>ITEM</type>
+                                            <name>itemids</name>
+                                            <value>
+                                                <key>agent.ping</key>
+                                                <host>FileMaker Server Windows Template</host>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>PLAIN_TEXT</type>
+                                    <y>2</y>
+                                    <width>6</width>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>show_lines</name>
+                                            <value>1</value>
+                                        </field>
+                                        <field>
+                                            <type>ITEM</type>
+                                            <name>itemids</name>
+                                            <value>
+                                                <key>system.uptime</key>
+                                                <host>FileMaker Server Windows Template</host>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>PLAIN_TEXT</type>
+                                    <x>6</x>
+                                    <y>2</y>
+                                    <width>6</width>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>show_lines</name>
+                                            <value>1</value>
+                                        </field>
+                                        <field>
+                                            <type>ITEM</type>
+                                            <name>itemids</name>
+                                            <value>
+                                                <key>net.tcp.listen[5003]</key>
+                                                <host>FileMaker Server Windows Template</host>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <x>12</x>
+                                    <y>4</y>
+                                    <width>6</width>
+                                    <height>4</height>
+                                    <fields>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <name>Process Information</name>
+                                                <host>FileMaker Server Windows Template</host>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <y>4</y>
+                                    <width>6</width>
+                                    <height>4</height>
+                                    <fields>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <name>CPU usage</name>
+                                                <host>FileMaker Server Windows Template</host>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <x>6</x>
+                                    <y>4</y>
+                                    <width>6</width>
+                                    <height>4</height>
+                                    <fields>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <name>Average disk queue length</name>
+                                                <host>FileMaker Server Windows Template</host>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>GRAPH_CLASSIC</type>
+                                    <x>18</x>
+                                    <y>2</y>
+                                    <width>6</width>
+                                    <height>6</height>
+                                    <fields>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <name>Free memory</name>
+                                                <host>FileMaker Server Windows Template</host>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                            </widgets>
+                        </page>
+                    </pages>
+                </dashboard>
+            </dashboards>
+        </template>
+    </templates>
+    <graphs>
+        <graph>
+            <uuid>8d7890ebc6604c9bac7727b9c1706faa</uuid>
+            <name>Average disk queue length</name>
+            <width>500</width>
+            <height>100</height>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>FileMaker Server Windows Template</host>
+                        <key>perf_counter_en[&quot;\PhysicalDisk(_Total)\Avg. Disk Read Queue Length&quot;]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>FileMaker Server Windows Template</host>
+                        <key>perf_counter_en[&quot;\PhysicalDisk(_Total)\Avg. Disk Write Queue Length&quot;]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>6540c147a41f46fba4fcf1814c29fb14</uuid>
+            <name>File read-writes (bps)</name>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>FileMaker Server Windows Template</host>
+                        <key>perf_counter_en[&quot;\System\File Read Bytes/sec&quot;]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>FileMaker Server Windows Template</host>
+                        <key>perf_counter_en[&quot;\System\File Write Bytes/sec&quot;]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>52837238c2974757b662e383d0175428</uuid>
+            <name>Free memory</name>
+            <width>400</width>
+            <yaxismax>0</yaxismax>
+            <show_work_period>NO</show_work_period>
+            <show_triggers>NO</show_triggers>
+            <type>PIE</type>
+            <show_3d>YES</show_3d>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>3333FF</color>
+                    <calc_fnc>LAST</calc_fnc>
+                    <item>
+                        <host>FileMaker Server Windows Template</host>
+                        <key>vm.memory.size[available]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>FileMaker Server Windows Template</host>
+                        <key>vm.memory.size[used]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>97f7aa824bcc47918be114a37474d608</uuid>
+            <name>Process Information</name>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>FileMaker Server Windows Template</host>
+                        <key>proc.num[]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>2774A4</color>
+                    <item>
+                        <host>FileMaker Server Windows Template</host>
+                        <key>perf_counter_en[&quot;\System\Threads&quot;]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>99edbf1265b34db4afd7274a0b35705f</uuid>
+            <name>Swap space</name>
+            <width>400</width>
+            <height>300</height>
+            <graph_items>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>FileMaker Server Windows Template</host>
+                        <key>system.swap.free</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>FileMaker Server Windows Template</host>
+                        <key>system.swap.size[,total]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+</zabbix_export>
